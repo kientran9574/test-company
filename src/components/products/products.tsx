@@ -87,7 +87,7 @@ const ProductsPage = () => {
         setSuggestedProducts(res.data);
         setSuggestionLoading(false);
       }, 800);
-    } catch (err: unknown) {
+    } catch {
       setTimeout(() => {
         setSuggestedProducts([]);
         setSuggestionLoading(false);
