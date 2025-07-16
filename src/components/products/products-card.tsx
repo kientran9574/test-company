@@ -16,6 +16,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import useProductsFavoriteStore from "@/stores/product-favorite-store";
+import useProductHistoryStore from "@/stores/product-history-store";
 const ProductCard = ({
   product,
   onUpdateProduct,
@@ -24,7 +25,6 @@ const ProductCard = ({
   onUpdateProduct?: (updatedProduct: Product) => void;
 }) => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [viewed, setViewed] = useState(product.isViewed);
   const favoriteProducts = useProductsFavoriteStore(
     (state: any) => state.favoriteProducts
   );
@@ -34,17 +34,22 @@ const ProductCard = ({
   const removeFavorite = useProductsFavoriteStore(
     (state: any) => state.removeFavorite
   );
+
   const isFavorite = favoriteProducts.some(
     (favoriteProduct: Product) => favoriteProduct.id === product.id
   );
 
+  const addViewedProduct = useProductHistoryStore(
+    (state: any) => state.addViewedProduct
+  );
+
   const handleViewDetail = () => {
-    const updateProduct = { ...product, isViewed: !viewed };
+    const updateProduct = { ...product, isViewed: true };
     if (onUpdateProduct) {
       onUpdateProduct(updateProduct);
     }
-    setViewed(true);
-    setSelectedProduct(product); // Lưu sản phẩm đã chọn
+    setSelectedProduct(product);
+    addViewedProduct(updateProduct);
   };
 
   const handleFavorite = () => {
